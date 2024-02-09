@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Events Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .event {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .event:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .event:hover {
+            background-color: #e6e6e6;
+        }
+        #searchBar {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="searchBar" placeholder="Search events...">
+    <div id="events"></div>
+    <script>
+        const events = [
+            { name: 'New Year\'s Eve', date: '12-31' },
+            { name: 'Carnival (Rio de Janeiro)', date: '02-25' },
+            { name: 'St. Patrick\'s Day', date: '03-17' },
+            { name: 'April Fools\' Day', date: '04-01' },
+            { name: 'Easter', date: '04-17' },
+            { name: 'Cinco de Mayo', date: '05-05' },
+            { name: 'Mother\'s Day', date: '05-08' },
+            { name: 'Father\'s Day', date: '06-19' },
+            { name: 'Independence Day (USA)', date: '07-04' },
+            { name: 'Bastille Day', date: '07-14' },
+            { name: 'Oktoberfest (Munich)', date: '09-22' },
+            { name: 'Halloween', date: '10-31' },
+            { name: 'Thanksgiving (USA)', date: '11-24' },
+            { name: 'Christmas', date: '12-25' },
+            { name: 'Valentine\'s Day', date: '02-14' },
+            { name: 'Hanukkah', date: '12-18' },
+            { name: 'Diwali', date: '10-24' },
+            { name: 'Canada Day', date: '07-01' },
+            { name: 'Chinese New Year', date: '02-01' },
+            { name: 'Holi', date: '03-01' },
+            { name: 'Ramadan', date: '04-13' },
+            { name: 'Eid al-Fitr', date: '05-03' },
+            { name: 'Eid al-Adha', date: '07-20' },
+            { name: 'Labor Day (USA)', date: '09-05' },
+            { name: 'Martin Luther King Jr. Day', date: '01-17' },
+            { name: 'Black Friday', date: '11-25' },
+            { name: 'Cyber Monday', date: '11-28' },
+            { name: 'Glastonbury Festival', date: '06-22' },
+            { name: 'Coachella', date: '04-15' },
+            { name: 'Super Bowl', date: '02-13' },
+            { name: 'Mardi Gras', date: '03-01' },
+            { name: 'Olympic Games', date: '07-23' },
+            { name: 'FIFA World Cup', date: '11-21' },
+            { name: 'United Nations General Assembly', date: '09-13' },
+            { name: 'Presidential Elections', date: '11-08' },
+            { name: 'World Economic Forum (WEF)', date: '01-17' },
+            { name: 'G20 Summit', date: '06-15' },
+            { name: 'Black History Month', date: '02-01' },
+            { name: 'International Women\'s Day', date: '03-08' },
+            { name: 'Earth Day', date: '04-22' },
+            { name: 'World AIDS Day', date: '12-01' },
+            { name: 'International Workers\' Day', date: '05-01' },
+            { name: 'World Health Day', date: '04-07' },
+            { name: 'Cannes Film Festival', date: '05-17' },
+            { name: 'Nobel Prize Ceremony', date: '10-10' },
+            { name: 'Cherry Blossom Festival', date: '03-20' },
+            { name: 'Day of the Dead', date: '11-02' },
+            { name: 'Melbourne Cup', date: '11-01' },
+            { name: 'Dubai World Cup', date: '03-28' },
+            { name: 'Lunar New Year', date: '01-25' },
+            { name: 'Royal Ascot', date: '06-16' },
+            { name: 'La Tomatina', date: '08-31' },
+            { name: 'The Oscars', date: '02-09' },
+            { name: 'Wimbledon Championships', date: '07-04' },
+            { name: 'Burning Man', date: '08-30' },
+            { name: 'Edinburgh Festival Fringe', date: '08-02' },
+            { name: 'Sydney Mardi Gras', date: '03-02' },
+            { name: 'Running of the Bulls', date: '07-07' },
+            { name: 'Venice Carnival', date: '02-18' },
+            { name: 'Comic-Con International', date: '07-18' },
+            { name: 'Sundance Film Festival', date: '01-23' },
+            { name: 'Tour de France', date: '06-26' },
+            { name: 'Walt Disney World Marathon', date: '01-08' },
+            { name: 'Berlin International Film Festival', date: '02-20' },
+            { name: 'US Open Tennis Championships', date: '08-30' },
+            { name: 'Monaco Grand Prix', date: '05-22' },
+            { name: 'San Fermin Festival', date: '07-06' },
+            { name: 'Rio de Janeiro Carnival', date: '02-21' },
+            { name: 'Electric Daisy Carnival (EDC)', date: '05-21' },
+            { name: 'Pride Parade', date: '06-24' },
+            { name: 'Tomorrowland', date: '07-22' },
+            { name: 'Glastonbury Festival', date: '06-22' },
+            { name: 'Boston Marathon', date: '04-19' },
+            { name: 'Bay to Breakers', date: '05-16' },
+            { name: 'Sydney New Year\'s Eve', date: '12-31' },
+            { name: 'Edinburgh Hogmanay', date: '12-31' },
+            { name: 'Notting Hill Carnival', date: '08-29' },
+            { name: 'Cannes Lions International Festival of Creativity', date: '06-21' },
+            { name: 'Kumbh Mela', date: '01-14' },
+            { name: 'Edinburgh Festival Fringe', date: '08-06' },
+            { name: 'Lollapalooza', date: '07-28' },
+            { name: 'Calgary Stampede', date: '07-08' },
+            { name: 'Berlin Marathon', date: '09-26' },
+            { name: 'Montreal Jazz Festival', date: '06-25' },
+            { name: 'Boryeong Mud Festival', date: '07-16' },
+            { name: 'Up Helly Aa', date: '01-28' },
+            { name: 'Boryeong Mud Festival', date: '07-16' },
+            { name: 'Albuquerque International Balloon Fiesta', date: '10-01' },
+            { name: 'Queen\'s Day (Koningsdag)', date: '04-27' },
+            { name: 'Bonnaroo Music and Arts Festival', date: '06-16' },
+            { name: 'Edinburgh Military Tattoo', date: '08-06' },
+            { name: 'World Series', date: '10-26' },
+            { name: 'Pamplona Bull Run', date: '07-07' },
+            { name: 'São Paulo Carnival', date: '02-18' },
+            { name: 'Roskilde Festival', date: '06-25' },
+            { name: 'Budapest Pride', date: '06-25' },
+            { name: 'Vancouver International Film Festival', date: '09-29' },
+            { name: 'Midsummer Eve (Midsommar)', date: '06-25' },
+            { name: 'Berlin International Green Week', date: '01-22' },
+            { name: 'Adelaide Fringe Festival', date: '02-18' },
+            { name: 'San Diego Comic-Con', date: '07-21' },
+            { name: 'Krakow Christmas Market', date: '11-25' },
+            { name: 'Gion Matsuri', date: '07-17' },
+            { name: 'Auckland Lantern Festival', date: '02-18' },
+            { name: 'Edinburgh International Book Festival', date: '08-14' },
+            { name: 'Melbourne International Comedy Festival', date: '03-30' },
+            { name: 'Venice Biennale', date: '04-23' },
+            { name: 'Tomorrowland Winter', date: '03-19' },
+            { name: 'Austin City Limits Music Festival', date: '10-07' },
+            { name: 'Ultra Music Festival', date: '03-25' },
+            { name: 'Edinburgh Fringe Festival', date: '08-06' },
+            { name: 'Glasgow International Comedy Festival', date: '03-10' },
+            { name: 'Edinburgh International Festival', date: '08-07' },
+            { name: 'Brisbane Festival', date: '09-03' },
+            { name: 'Great Wall Marathon', date: '05-21' },
+            { name: 'London Marathon', date: '10-03' },
+            { name: 'St. Petersburg White Nights Festival', date: '06-11' },
+            { name: 'Boryeong Mud Festival', date: '07-16' },
+            { name: 'La Merce', date: '09-24' },
+            { name: 'Leeds Festival', date: '08-26' },
+            { name: 'Reading Festival', date: '08-26' },
+            { name: 'Exit Festival', date: '07-07' },
+            { name: 'Burning Man', date: '08-30' },
+            { name: 'Edinburgh Festival Fringe', date: '08-06' },
+            { name: 'Sziget Festival', date: '08-10' },
+            { name: 'Creamfields', date: '08-26' },
+            { name: 'Primavera Sound', date: '06-02' },
+            { name: 'Glastonbury Festival', date: '06-22' },
+            { name: 'Rock in Rio', date: '09-02' },
+            { name: 'Summerfest', date: '06-23' },
+            { name: 'SXSW', date: '03-11' },
+            { name: 'Coachella', date: '04-15' },
+            { name: 'Bonnaroo Music and Arts Festival', date: '06-16' }
+            
+            
+            
+            
+            
+            
+        ];
+
+        function formatDate(date) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const [month, day] = date.split('-');
+            return `${months[parseInt(month) - 1]} ${day}`;
+        }
+
+        function displayEvents() {
+            const searchBar = document.getElementById('searchBar');
+            const eventsElement = document.getElementById('events');
+
+            // Clear any existing content in the events container
+            eventsElement.innerHTML = '';
+
+            // Get the search query
+            const searchQuery = searchBar.value.toLowerCase();
+
+            // Filter events based on the search query
+            const filteredEvents = events.filter(event => event.name.toLowerCase().includes(searchQuery));
+
+            // Iterate over each event in the filtered events array
+            filteredEvents.forEach(event => {
+                // Create a new div element for each event
+                const eventDiv = document.createElement('div');
+                eventDiv.classList.add('event');
+
+                // Format the event date using the formatDate function
+                const eventDate = new Date(new Date().getFullYear(), parseInt(event.date.split('-')[0]) - 1, parseInt(event.date.split('-')[1]));
+                const formattedDate = formatDate(event.date);
+
+                // Create a span element for the event name
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = event.name;
+
+                // Create a span element for the event date
+                const dateSpan = document.createElement('span');
+                dateSpan.textContent = formattedDate;
+
+                // Create a span element for the timer
+                const timerSpan = document.createElement('span');
+                eventDiv.appendChild(nameSpan);
+                eventDiv.appendChild(dateSpan);
+                eventDiv.appendChild(timerSpan);
+
+                // Append the event div to the events container
+                eventsElement.appendChild(eventDiv);
+
+                // Update the timer
+                function updateTimer() {
+                    const now = new Date();
+                    const timeRemaining = eventDate - now;
+                    const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                    const hoursRemaining = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutesRemaining = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const secondsRemaining = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                    timerSpan.textContent = `${daysRemaining}d ${hoursRemaining}h ${minutesRemaining}m ${secondsRemaining}s`;
+                }
+
+                // Update the timer immediately
+                updateTimer();
+
+                // Update the timer every second
+                setInterval(updateTimer, 1000);
+            });
+        }
+
+        // Call the displayEvents function to initially display the events
+        displayEvents();
+
+        // Add event listener for the search bar input
+        const searchBar = document.getElementById('searchBar');
+        searchBar.addEventListener('input', displayEvents);
+    </script>
+</body>
+</html>
